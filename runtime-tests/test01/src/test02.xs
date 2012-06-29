@@ -1,11 +1,12 @@
 {
-	TYPE firstvar;
-	TYPE secondvar;
+	int firstvar;
+	string secondvar;
 	{
-		TYPE thirdvar;
-		
+		bool thirdvar;
+		var somestupidvar;
 		{
-			
+			array<float = PrimaryExpr> arr1;
+			array<PrimaryExpr> arr2;
 		}
 	}
 }

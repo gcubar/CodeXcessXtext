@@ -20,11 +20,23 @@ Statement
 	;
 
 LocalVarDecl
-	:	'TYPE' VariableDeclarator
+	:	Type VariableDeclarator
 	;
 
 VariableDeclarator
-	:	ID 
+	:	ID
 	;
 
+//------------------------------------------------- Types
+Type
+	:	ID ('<' TypeArgList '>')?
+	;
 
+TypeArgList
+	:	TypeArgument (',' TypeArgument)*
+	;
+
+TypeArgument
+	:	ID '=' 'PrimaryExpr'
+	|	'PrimaryExpr'
+	;
