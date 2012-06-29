@@ -1,0 +1,19 @@
+grammar com.xkp.codexcess.Xss with org.eclipse.xtext.common.Terminals
+
+generate xss "http://www.xkp.com/codexcess/Xss"
+
+Program
+	:	block=Block
+	;
+
+Block
+	:	'{' StmList? '}'
+	;
+
+StmList
+	:	Statement+
+	;
+
+Statement
+	:	Block
+	;
