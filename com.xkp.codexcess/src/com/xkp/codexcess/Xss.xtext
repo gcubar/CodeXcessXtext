@@ -15,5 +15,16 @@ StmList
 	;
 
 Statement
-	:	Block
+	:	LocalVarDecl ';'
+	|	Block
 	;
+
+LocalVarDecl
+	:	'TYPE' VariableDeclarator
+	;
+
+VariableDeclarator
+	:	ID 
+	;
+
+
