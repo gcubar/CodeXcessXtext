@@ -24,12 +24,56 @@ LocalVarDecl
 	;
 
 VariableDeclarator
-	:	ID
+	:	IDENTIFIER ('=' 'Expression')?
+	;
+
+//------------------------------------------------- Expressions
+ObjectListOpt
+	:	ObjectList?
+	;
+
+ObjectList
+	:	ObjectValue (',' ObjectValue)*;
+
+ObjectValue
+	:	IDENTIFIER ':' 'Expression'
+	;
+
+PrimaryExpr
+	:	Primary
+	|	'new' Type '(' ArgListOpt ')'
+	|	'{' ObjectListOpt '}'
+	//|	'(' Expression ')'
+	;
+
+ArrayLiteral
+	:	'[' ArgListOpt ']'
+	;
+
+Primary
+	:	IDENTIFIER ( '(' ArgListOpt ')' )?
+	|	ArrayLiteral
+	|	Literal
+	;
+
+//------------------------------------------------- Arguments
+ArgListOpt
+	:	ArgList?
+	;
+
+ArgList
+	:	Argument (',' Argument)*
+	;
+
+Argument
+	//:	(IDENTIFIER '=' ConditionalExpr)
+	//|	ConditionalExpr
+	:	IDENTIFIER
 	;
 
 //------------------------------------------------- Types
 Type
-	:	ID ('<' TypeArgList '>')?
+	:	IDENTIFIER ('<' TypeArgList '>')?
 	;
 
 TypeArgList
@@ -37,6 +81,37 @@ TypeArgList
 	;
 
 TypeArgument
-	:	ID '=' 'PrimaryExpr'
-	|	'PrimaryExpr'
+	:	IDENTIFIER '=' PrimaryExpr
+	|	PrimaryExpr
+	;
+
+//------------------------------------------------- Literals
+Literal
+	:	'true'
+	|	'false'
+	|	DEC_LITERAL
+	|	HEX_LITERAL
+	|	REAL_LITERAL
+	|	CHAR_LITERAL
+	|	STRING_LITERAL
+	|	'null'
+	;
+
+//------------------------------------------------- IDs
+MemberList:
+	MEMBER_NAME+
+;
+
+QualifiedID:
+  	IDENTIFIER MemberList?
+;
+
+terminal IDENTIFIER: ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
+terminal MEMBER_NAME: '.' ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
+terminal REAL_LITERAL: ('0'..'9')* '.' INT;
+terminal DEC_LITERAL: INT;
+terminal HEX_LITERAL: '0' ('x'|'X') ('0'..'9'|'A'..'F'|'a'..'f')+;
+terminal STRING_LITERAL: STRING;
+terminal CHAR_LITERAL:
+		"'" ( '\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") ) "'"
 	;

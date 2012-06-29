@@ -5,8 +5,13 @@
 		bool thirdvar;
 		var somestupidvar;
 		{
-			array<float = PrimaryExpr> arr1;
-			array<PrimaryExpr> arr2;
+			array<float = 3.14> arr1;
+			array<string, int> arr2;
 		}
+		
+		container < {
+				id: 	Expression, 
+				name: 	Expression
+			} > map; 
 	}
 }
