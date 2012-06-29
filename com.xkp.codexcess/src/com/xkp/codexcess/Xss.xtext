@@ -24,10 +24,76 @@ LocalVarDecl
 	;
 
 VariableDeclarator
-	:	IDENTIFIER ('=' 'Expression')?
+	:	IDENTIFIER ('=' Expression)?
 	;
 
 //------------------------------------------------- Expressions
+ExpressionOpt
+	:	Expression?
+	;
+
+ExpressionList
+	:	Expression (',' Expression)*
+	;
+
+Expression
+	:	ConditionalExpr (('='|'+='|'-='|'*='|'/='|'<<='|'>>=') ConditionalExpr)*
+	;
+
+ConditionalExpr
+	:	OrExpr ('?' OrExpr ':' ConditionalExpr)?
+	;
+
+OrExpr
+	:	AndExpr ('||' AndExpr)*
+	;
+
+AndExpr
+	:	EqualityExpr ('&&' EqualityExpr)*
+	;
+
+EqualityExpr
+	:	CompExpr (('=='|'!=') CompExpr)*
+	;
+
+CompExpr
+	:	ShiftExpr (('<'|'>'|'<='|'>='|'as'|'is'|'has') ShiftExpr)*
+	;
+
+ShiftExpr
+	:	AddExpr (('<<'|'>>') AddExpr)*
+	;
+
+AddExpr
+	:	MultExpr (('+'|'-') MultExpr)*
+	;
+
+MultExpr
+	:	UnaryExpr (('*'|'/'|'%') UnaryExpr)*
+	;
+
+//check this
+UnaryExpr
+	:	'!' MethodExpr
+	|	'-' MethodExpr
+	|	'++' MethodExpr
+	|	'--' MethodExpr
+	|	MethodExpr
+	;
+
+MethodExpr
+	//:	Method (Method | PrimaryExpr)*
+	//|	PrimaryExpr
+	:	PrimaryExpr+
+	;
+
+Method
+	:	MEMBER_NAME ( '(' ArgListOpt ')' )?
+	|	'[' ExpressionList ']'
+	//|	'++'
+	//|	'--'
+	;
+
 ObjectListOpt
 	:	ObjectList?
 	;
@@ -36,7 +102,7 @@ ObjectList
 	:	ObjectValue (',' ObjectValue)*;
 
 ObjectValue
-	:	IDENTIFIER ':' 'Expression'
+	:	IDENTIFIER ':' Expression
 	;
 
 PrimaryExpr
