@@ -82,16 +82,13 @@ UnaryExpr
 	;
 
 MethodExpr
-	//:	Method (Method | PrimaryExpr)*
-	//|	PrimaryExpr
-	:	PrimaryExpr+
+	:	Method* PrimaryExpr
 	;
 
 Method
 	:	MEMBER_NAME ( '(' ArgListOpt ')' )?
 	|	'[' ExpressionList ']'
-	//|	'++'
-	//|	'--'
+	//|	('++'|'--')
 	;
 
 ObjectListOpt
@@ -164,13 +161,13 @@ Literal
 	;
 
 //------------------------------------------------- IDs
-MemberList:
-	MEMBER_NAME+
-;
+MemberList
+	:	MEMBER_NAME+
+	;
 
-QualifiedID:
-  	IDENTIFIER MemberList?
-;
+QualifiedID
+	:	IDENTIFIER MemberList?
+	;
 
 terminal IDENTIFIER: ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
 terminal MEMBER_NAME: '.' ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
