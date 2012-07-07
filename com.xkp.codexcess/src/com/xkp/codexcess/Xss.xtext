@@ -18,6 +18,12 @@ StmList
 
 Statement
 	:	LocalVarDecl ';'
+	|	'if' '(' Expression ')' Statement ('else' Statement)?
+	//|	'for' '(' forInitOpt ';' forConditionOpt ';' forIteratorOpt ')' statement
+	|	'for' '(' Type IDENTIFIER 'in' Expression ')' Statement
+	|	'while' '(' Expression ')' Statement
+	//|	'switch' '(' switchHeader ')' '{' switchSectionsOpt '}'
+	|	Expression ';'
 	|	Block
 	;
 
@@ -74,12 +80,11 @@ MultExpr
 	:	UnaryExpr (('*'|'/'|'%') UnaryExpr)*
 	;
 
-//check this
 UnaryExpr
-	:	'!' MethodExpr
-	|	'-' MethodExpr
-	|	'++' MethodExpr
-	|	'--' MethodExpr
+	:	'!' UnaryExpr
+	|	'-' UnaryExpr
+	|	'++' UnaryExpr
+	|	'--' UnaryExpr
 	|	MethodExpr
 	;
 
@@ -87,10 +92,11 @@ MethodExpr
 	:	Method* PrimaryExpr
 	;
 
+//check this for: Primary ('++'|'--')?
 Method
 	:	MEMBER_NAME ( '(' ArgListOpt ')' )?
 	|	'[' ExpressionList ']'
-	//|	('++'|'--')
+	|	Primary ('++'|'--')?
 	;
 
 ObjectListOpt
@@ -105,10 +111,10 @@ ObjectValue
 	;
 
 PrimaryExpr
-	:	('(' Expression ')')
-	|	Primary
+	:	Primary
 	|	'new' Type '(' ArgListOpt ')'
 	|	'{' ObjectListOpt '}'
+	|	('(' Expression ')')
 	;
 
 ArrayLiteral
@@ -131,9 +137,7 @@ ArgList
 	;
 
 Argument
-	//:	(IDENTIFIER '=' ConditionalExpr)
-	//|	ConditionalExpr
-	:	IDENTIFIER
+	:	(IDENTIFIER '=')? ConditionalExpr
 	;
 
 //------------------------------------------------- Types
@@ -146,20 +150,19 @@ TypeArgList
 	;
 
 TypeArgument
-	:	IDENTIFIER '=' PrimaryExpr
-	|	PrimaryExpr
+	:	(IDENTIFIER '=')? PrimaryExpr
 	;
 
 //------------------------------------------------- Literals
 Literal
 	:	'true'
 	|	'false'
+	|	'null'
 	|	DEC_LITERAL
 	|	HEX_LITERAL
 	|	REAL_LITERAL
 	|	CHAR_LITERAL
 	|	STRING_LITERAL
-	|	'null'
 	;
 
 //------------------------------------------------- IDs
